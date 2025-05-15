@@ -1,0 +1,44 @@
+flask_blog/
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── config.py
+│   ├── auth/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   ├── forms.py
+│   ├── blog/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   ├── forms.py
+│   ├── admin/
+│   │   ├── __init__.py
+│   │   ├── routes.py
+│   │   ├── forms.py
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   ├── auth/
+│   │   │   ├── login.html
+│   │   │   ├── register.html
+│   │   ├── blog/
+│   │   │   ├── index.html
+│   │   │   ├── post.html
+│   │   │   ├── create_post.html
+│   │   │   ├── edit_post.html
+│   │   ├── admin/
+│   │   │   ├── dashboard.html
+│   │   │   ├── users.html
+│   │   │   ├── posts.html
+│   │   │   ├── comments.html
+│   ├── static/
+│   │   ├── css/
+│   │   │   ├── style.css
+│   │   ├── js/
+│   │   │   ├── script.js
+├── migrations/
+├── docker-compose.yml
+├── Dockerfile
+├── requirements.txt
+├── run.py
+├── check_prerequisites.sh

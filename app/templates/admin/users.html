@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - Flask Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Manage Users</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users.items %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{% if user.is_admin %}Admin{% else %}User{% endif %}</td>
+                            <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <a href="{{ url_for('auth.profile', username=user.username) }}" class="btn btn-sm btn-info">View</a>
+                                {% if user != current_user %}
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal{{ user.id }}">Delete</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        
+                        <!-- Delete User Modal -->
+                        <div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" aria-labelledby="deleteUserModalLabel{{ user.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteUserModalLabel{{ user.id }}">Delete User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete user "{{ user.username }}"? This action cannot be undone and will delete all posts and comments by this user.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="POST">
+                                            <input class="btn btn-danger" type="submit" value="Delete">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="pagination">
+            {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                {% if page_num %}
+                    {% if users.page == page_num %}
+                        <a class="btn btn-primary mb-4" href="{{ url_for('admin.users', page=page_num) }}">{{ page_num }}</a>
+                    {% else %}
+                        <a class="btn btn-outline-primary mb-4" href="{{ url_for('admin.users', page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+                {% else %}
+                    <span class="btn btn-outline-secondary mb-4 disabled">...</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

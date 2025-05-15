@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Flask Blog{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Admin Dashboard</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 text-center">
+            <div class="card-body">
+                <h2 class="card-title">{{ users_count }}</h2>
+                <p class="card-text">Users</p>
+                <a href="{{ url_for('admin.users') }}" class="btn btn-primary">Manage Users</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 text-center">
+            <div class="card-body">
+                <h2 class="card-title">{{ posts_count }}</h2>
+                <p class="card-text">Posts</p>
+                <a href="{{ url_for('admin.posts') }}" class="btn btn-primary">Manage Posts</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 text-center">
+            <div class="card-body">
+                <h2 class="card-title">{{ comments_count }}</h2>
+                <p class="card-text">Comments</p>
+                <a href="{{ url_for('admin.comments') }}" class="btn btn-primary">Manage Comments</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

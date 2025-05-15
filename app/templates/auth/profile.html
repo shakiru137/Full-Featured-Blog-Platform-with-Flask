@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.username }}'s Profile - Flask Blog{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h2>{{ user.username }}</h2>
+                <p class="text-muted">{{ user.email }}</p>
+                <p class="text-muted">Joined: {{ user.created_at.strftime('%Y-%m-%d') }}</p>
+                {% if user.is_admin %}
+                    <span class="badge bg-danger">Admin</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs" id="profileTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts" type="button" role="tab" aria-controls="posts" aria-selected="true">Posts</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments" type="button" role="tab" aria-controls="comments" aria-selected="false">Comments</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="profileTabsContent">
+                    <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                        {% if posts.items %}
+                            {% for post in posts.items %}
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ post.title }}</h5>
+                                        <p class="card-text text-muted">{{ post.created_at.strftime('%Y-%m-%d') }}</p>
+                                        <a href="{{ url_for('blog.post', post_id=post.id) }}" class="btn btn-sm btn-primary">Read More</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="pagination">
+                                {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                    {% if page_num %}
+                                        {% if posts.page == page_num %}
+                                            <a class="btn btn-primary mb-4" href="{{ url_for('auth.profile', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                                        {% else %}
+                                            <a class="btn btn-outline-primary mb-4" href="{{ url_for('auth.profile', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="btn btn-outline-secondary mb-4 disabled">...</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>No posts yet.</p>
+                        {% endif %}
+                    </div>
+                    <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                        {% if comments.items %}
+                            {% for comment in comments.items %}
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ comment.body }}</p>
+                                        <p class="card-text text-muted">On post: <a href="{{ url_for('blog.post', post_id=comment.post_id) }}">{{ comment.post.title }}</a></p>
+                                        <p class="card-text text-muted">{{ comment.created_at.strftime('%Y-%m-%d') }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="pagination">
+                                {% for page_num in comments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                                    {% if page_num %}
+                                        {% if comments.page == page_num %}
+                                            <a class="btn btn-primary mb-4" href="{{ url_for('auth.profile', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                                        {% else %}
+                                            <a class="btn btn-outline-primary mb-4" href="{{ url_for('auth.profile', username=user.username, page=page_num) }}">{{ page_num }}</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="btn btn-outline-secondary mb-4 disabled">...</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p>No comments yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
